@@ -12,8 +12,10 @@ HireMe is a comprehensive job portal backend built with **Node.js**, **Express**
 * **Backend:** Node.js & Express.js
 * **Database:** MongoDB (Mongoose ODM)
 * **Payment Gateway:** Stripe API
+* **File Uploads:** Multer / Cloudinary (CV Storage)
 * **Authentication:** JWT (JsonWebToken) & Bcrypt
 * **Validation:** Joi
+
 
 ---
 
