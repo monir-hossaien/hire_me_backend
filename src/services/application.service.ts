@@ -150,8 +150,7 @@ export const fetchApplicationsService = async (req: any) => {
                 const employer = app.job_id?.employer_id;
                 return (
                     searchRegex.test(employer?.first_name) ||
-                    searchRegex.test(employer?.last_name) ||
-                    searchRegex.test(employer?.company_name)
+                    searchRegex.test(employer?.last_name)
                 );
             });
         }

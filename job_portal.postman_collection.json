@@ -34,7 +34,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "\r\n{\r\n    \"email\": \"abir@example.com\",\r\n    \"password\": \"admin@123\"\r\n}",
+							"raw": "\r\n{\r\n    \"email\": \"monir@example.com\",\r\n    \"password\": \"admin@123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -342,7 +342,7 @@
 								}
 							}
 						},
-						"url": "{{base_url}}/update-status/6961571caac786c8f0e0d5cb"
+						"url": "{{base_url}}/update-status/696168fb05165658dc0c7ac7"
 					},
 					"response": []
 				},

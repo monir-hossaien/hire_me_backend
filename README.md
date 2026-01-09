@@ -57,7 +57,7 @@ npm start
 
 ## API Endpoints
 
-### Authentication (/api/v1/)
+### Authentication (`https://hire-me-backend-nine.vercel.app/api/v1/`)
 
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
@@ -67,7 +67,7 @@ npm start
 
 ---
 
-### Job Management (/api/v1/)
+### Job Management (`https://hire-me-backend-nine.vercel.app/api/v1/`)
 
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
@@ -80,7 +80,7 @@ npm start
 
 ---
 
-### Applications & Payments (`/api/v1/`)
+### Applications & Payments (`https://hire-me-backend-nine.vercel.app/api/v1/`)
 
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
@@ -89,7 +89,7 @@ npm start
 | GET | /all-applications | All (Auth) | View applications |
 | PATCH | /update-status/:application_id | Admin, Employer | Accept/Reject |
 
-### Admin Management (`/api/v1/`)
+### Admin Management (`https://hire-me-backend-nine.vercel.app/api/v1/`)
 
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
