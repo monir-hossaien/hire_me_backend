@@ -7,6 +7,8 @@ import helmet from 'helmet';
 import hpp from 'hpp';
 import mongoose from 'mongoose';
 import { rateLimit } from 'express-rate-limit';
+import authRoutes from './routes/auth.route';
+import jobRoutes from './routes/job.route';
 
 const app: Application = express();
 
@@ -34,6 +36,10 @@ app.use(cors(corsOptions));
 // 3. Prevent HTTP Parameter Pollution
 app.use(hpp());
 app.use(limiter);
+
+// Routes
+app.use('/api/v1', authRoutes);
+app.use('/api/v1', jobRoutes);
 
 app.get('/api/v1/health', (req: Request, res: Response) => {
   const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';
