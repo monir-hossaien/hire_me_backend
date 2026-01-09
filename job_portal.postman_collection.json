@@ -1,0 +1,466 @@
+{
+	"info": {
+		"_postman_id": "e3fc9955-95f4-4e68-bd2d-03dbee7b5e38",
+		"name": "job_portal",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "32169346"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"first_name\": \"Creative\",\r\n    \"last_name\": \"IT\",\r\n    \"email\": \"creative@example.com\",\r\n    \"password\": \"admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/auth/register"
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"email\": \"abir@example.com\",\r\n    \"password\": \"admin@123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/auth/login"
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/auth/logout"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "health-check",
+			"item": [
+				{
+					"name": "health-check",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8000/api/v1/health"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "job",
+			"item": [
+				{
+					"name": "create-job",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Technical Content Writer\",\r\n    \"description\": \"Write API documentation.\",\r\n    \"category\": \"Content Writing\",\r\n    \"salary\": \"$25 - $40 / hour\",\r\n    \"location\": \"Remote\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/create-job"
+					},
+					"response": [
+						{
+							"name": "create-job",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"title\": \"Senior Frontend Developer\",\r\n    \"description\": \"We are looking for a React expert to lead our dashboard team. Must have 5+ years of experience with TypeScript and Tailwind CSS.\",\r\n    \"category\": \"Software Engineering\",\r\n    \"salary\": \"85000\",\r\n    \"location\": \"Remote\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "/create-job"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": [
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "100"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "98"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Jan 2026 18:30:12 GMT"
+								},
+								{
+									"key": "X-RateLimit-Reset",
+									"value": "1767984313"
+								},
+								{
+									"key": "Content-Security-Policy",
+									"value": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests"
+								},
+								{
+									"key": "Cross-Origin-Opener-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Cross-Origin-Resource-Policy",
+									"value": "same-origin"
+								},
+								{
+									"key": "Origin-Agent-Cluster",
+									"value": "?1"
+								},
+								{
+									"key": "Referrer-Policy",
+									"value": "no-referrer"
+								},
+								{
+									"key": "Strict-Transport-Security",
+									"value": "max-age=31536000; includeSubDomains"
+								},
+								{
+									"key": "X-Content-Type-Options",
+									"value": "nosniff"
+								},
+								{
+									"key": "X-DNS-Prefetch-Control",
+									"value": "off"
+								},
+								{
+									"key": "X-Download-Options",
+									"value": "noopen"
+								},
+								{
+									"key": "X-Frame-Options",
+									"value": "SAMEORIGIN"
+								},
+								{
+									"key": "X-Permitted-Cross-Domain-Policies",
+									"value": "none"
+								},
+								{
+									"key": "X-XSS-Protection",
+									"value": "0"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:5173"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Access-Control-Allow-Credentials",
+									"value": "true"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "481"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"1e1-AwWwYAtEHD7iwJXLF0DZaZ9kFic\""
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"statusCode\": 201,\n    \"status\": true,\n    \"message\": \"Job posted successfully\",\n    \"data\": {\n        \"title\": \"Senior Frontend Developer\",\n        \"description\": \"We are looking for a React expert to lead our dashboard team. Must have 5+ years of experience with TypeScript and Tailwind CSS.\",\n        \"category\": \"Software Engineering\",\n        \"salary\": \"85000\",\n        \"location\": \"Remote\",\n        \"employer_id\": \"6960ba44e890ce39b7c257d1\",\n        \"_id\": \"69614934480c8b0442b3bc22\",\n        \"createdAt\": \"2026-01-09T18:30:12.636Z\",\n        \"updatedAt\": \"2026-01-09T18:30:12.636Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "delete-job",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{base_url}}/delete-job/6960cb99ff793881ed359c3d"
+					},
+					"response": []
+				},
+				{
+					"name": "update-job",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n\r\n{\r\n    \"title\": \"Senior Frontend Developer\",\r\n    \"description\": \"We are looking for an experienced React developer to join our team. Must have 5+ years of experience with TypeScript and Tailwind CSS.\",\r\n    \"category\": \"IT & Software\",\r\n    \"salary\": \"80,000 - 100,000 BDT\",\r\n    \"location\": \"Dhaka (Remote)\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/update-job/6960bdb90566db0622a1cc3a"
+					},
+					"response": []
+				},
+				{
+					"name": "all-jobs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n\r\n{\r\n    \"title\": \"Senior Frontend Developer\",\r\n    \"description\": \"We are looking for an experienced React developer to join our team. Must have 5+ years of experience with TypeScript and Tailwind CSS.\",\r\n    \"category\": \"IT & Software\",\r\n    \"salary\": \"80,000 - 100,000 BDT\",\r\n    \"location\": \"Dhaka (Remote)\"\r\n}"
+						},
+						"url": "{{base_url}}/all-jobs"
+					},
+					"response": []
+				},
+				{
+					"name": "fetch-job-details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n\r\n{\r\n    \"title\": \"Senior Frontend Developer\",\r\n    \"description\": \"We are looking for an experienced React developer to join our team. Must have 5+ years of experience with TypeScript and Tailwind CSS.\",\r\n    \"category\": \"IT & Software\",\r\n    \"salary\": \"80,000 - 100,000 BDT\",\r\n    \"location\": \"Dhaka (Remote)\"\r\n}"
+						},
+						"url": "{{base_url}}/fetch-job-details/6960c2c8c3819de01b46e8a9"
+					},
+					"response": []
+				},
+				{
+					"name": "search-jobs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{base_url}}/search-jobs/IT & Software"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "application",
+			"item": [
+				{
+					"name": "apply-job",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "cv_url",
+									"type": "file",
+									"src": "postman-cloud:///1f0ed5ef-8e1c-4620-9f6e-5511bf946213",
+									"disabled": true
+								}
+							]
+						},
+						"url": "{{base_url}}/create-checkout-session/696166f0e8a4023d0dd0730b"
+					},
+					"response": []
+				},
+				{
+					"name": "verify-payment",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/verify-payment?session_id=cs_test_a1kWXRLRZ2xnRnKuYXLmSc0YtFMb6PfhcTp60H93zVG6UmBRnvXjlQ9Mnb",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"verify-payment"
+							],
+							"query": [
+								{
+									"key": "session_id",
+									"value": "cs_test_a1kWXRLRZ2xnRnKuYXLmSc0YtFMb6PfhcTp60H93zVG6UmBRnvXjlQ9Mnb"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-status",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n    \"status\": \"accepted\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/update-status/6961571caac786c8f0e0d5cb"
+					},
+					"response": []
+				},
+				{
+					"name": "all-applications",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{base_url}}/all-applications"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "admin",
+			"item": [
+				{
+					"name": "users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{base_url}}/users"
+					},
+					"response": []
+				},
+				{
+					"name": "update-user",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n\r\n{\r\n    \"first_name\": \"John\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{base_url}}/update-user/696037c1eb425ce62613593d"
+					},
+					"response": []
+				},
+				{
+					"name": "delete-user",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{base_url}}/delete-user/696037c1eb425ce62613593d"
+					},
+					"response": []
+				},
+				{
+					"name": "analytics",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": "{{base_url}}/analytics"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": ""
+		}
+	]
+}

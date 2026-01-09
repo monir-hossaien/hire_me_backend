@@ -5,10 +5,14 @@ import cors, { CorsOptions } from 'cors';
 import 'dotenv/config';
 import helmet from 'helmet';
 import hpp from 'hpp';
+import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { rateLimit } from 'express-rate-limit';
+
 import authRoutes from './routes/auth.route';
 import jobRoutes from './routes/job.route';
+import applicationRoutes from './routes/application.route';
+import adminRoutes from './routes/admin.route';
 
 const app: Application = express();
 
@@ -27,6 +31,7 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
+app.use(cookieParser());
 
 // 1. Security Headers
 app.use(helmet());
@@ -40,6 +45,8 @@ app.use(limiter);
 // Routes
 app.use('/api/v1', authRoutes);
 app.use('/api/v1', jobRoutes);
+app.use('/api/v1', applicationRoutes);
+app.use('/api/v1', adminRoutes);
 
 app.get('/api/v1/health', (req: Request, res: Response) => {
   const dbStatus = mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected';

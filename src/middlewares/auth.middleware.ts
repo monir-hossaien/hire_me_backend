@@ -8,7 +8,7 @@ export const authenticateUser = async (
   next: NextFunction
 ) => {
   try {
-    const token = req.cookies?.token as string;
+    const token = (req.headers['token'] || req.cookies?.token) as string;
 
     if (!token) {
       return res.status(401).json({

@@ -31,7 +31,7 @@ export const deleteJob = async (req: Request, res: Response) => {
 
 // update single job
 export const updateJob = async (req: Request, res: Response) => {
-    const result = await jobServices.deleteJobService(req)
+    const result = await jobServices.updateJobService(req)
     return res.status(result.statusCode).json(result)
 }
 

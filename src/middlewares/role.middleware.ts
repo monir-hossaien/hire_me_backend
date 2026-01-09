@@ -4,15 +4,17 @@ import { AuthRequest } from '../interfaces/auth.interface';
 
 export const authorizeRole = (allowedRoles: UserRole[]) => {
     return (req: AuthRequest, res: Response, next: NextFunction) => {
+
+        const user = req.user;
         try {
-            if (!req.user) {
+            if (!user) {
                 return res.status(401).json({
                     status: false,
                     message: "Unauthorized. User identity not found.",
                 });
             }
 
-            if (!allowedRoles.includes(req.user.role)) {
+            if (!allowedRoles.includes(user?.role)) {
                 return res.status(403).json({
                     status: false,
                     message: "Access denied! You do not have permission for this action.",

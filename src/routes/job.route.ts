@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import * as jobController from "../controllers/job.controller"
 import {authenticateUser} from "../middlewares/auth.middleware";
 import {authorizeRole} from "../middlewares/role.middleware";
@@ -11,34 +11,34 @@ const router = Router();
 
 router.post('/create-job',
     authenticateUser,
-    authorizeRole([UserRole.EMPLOYEE]),
+    authorizeRole([UserRole.EMPLOYER, UserRole.ADMIN]),
     validate(jobSchema),
     jobController.createJob
     );
 
 router.get('/all-jobs',
     authenticateUser,
-    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYEE]),
+    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYER, UserRole.JOB_SEEKER]),
     jobController.fetchAllJobs
     );
 
 router.get('/search-jobs/:category', authenticateUser, jobController.searchJobs);
 
-router.get('/fetch-job/:job_id',
+router.get('/fetch-job-details/:job_id',
     authenticateUser,
-    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYEE, UserRole.JOB_SEEKER]),
+    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYER, UserRole.JOB_SEEKER]),
     jobController.fetchJobDetails
     );
 
 router.put('/update-job/:job_id',
     authenticateUser,
-    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYEE]),
+    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYER]),
     jobController.updateJob
     );
 
-router.delete('delete-job/:job_id',
+router.delete('/delete-job/:job_id',
     authenticateUser,
-    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYEE]),
+    authorizeRole([UserRole.ADMIN, UserRole.EMPLOYER]),
     jobController.deleteJob
     );
 

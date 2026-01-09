@@ -1,7 +1,7 @@
 import Job from "../models/job.model";
-import {UserRole} from "../utils/constants";
+import { UserRole } from "../utils/constants";
 
-// create job service
+// 1. Create job service
 export const createJobService = async (req: any) => {
     try {
         const { title, description, category, salary, location } = req.body;
@@ -12,52 +12,32 @@ export const createJobService = async (req: any) => {
             category,
             salary,
             location,
-            user_id: req.user._id
+            employer_id: req.user._id
         });
 
         if (!newJob) {
-            return {
-                statusCode: 400,
-                status: false,
-                message: "Job creation failed"
-            };
+            return { statusCode: 400, status: false, message: "Job creation failed" };
         }
-        return {
-            statusCode: 201,
-            status: true,
-            message: "Job posted successfully",
-            data: newJob
-        };
+        return { statusCode: 201, status: true, message: "Job posted successfully", data: newJob };
     } catch (error: any) {
         return { statusCode: 500, status: false, message: error.message };
     }
 };
 
-// fetch all jobs service
+// 2. Fetch all jobs service
 export const fetchAllJobService = async (req: any) => {
-    const role = req.user.role;
-    const user_id = req.user._id;
+    const { role, _id: user_id } = req.user;
     try {
-        let query = {};
-        if (role === UserRole.EMPLOYEE) {
-            query = { user_id };
-        } else if (role === UserRole.JOB_SEEKER || role === UserRole.ADMIN) {
-            query = {};
-        } else {
-            return { statusCode: 403, status: false, message: "Unauthorized role" };
+        let query: any = {};
+
+        // If Employer, only show their own jobs. Admin and Job Seeker see all.
+        if (role === UserRole.EMPLOYER) {
+            query.employer_id = user_id;
         }
 
         const jobs = await Job.find(query)
-            .populate('user_id', 'first_name last_name email')
+            .populate('employer_id', 'first_name last_name email') // Correct field name
             .sort({ createdAt: -1 });
-
-        if (!jobs) {
-            return {
-                statusCode: 404,
-                status: false,
-                message: "No jobs post found"
-            };
-        }
 
         return {
             statusCode: 200,
@@ -70,83 +50,64 @@ export const fetchAllJobService = async (req: any) => {
     }
 };
 
-// fetch single job
+// 3. Fetch single job
 export const fetchJobDetailService = async (req: any) => {
-
-    const role = req.user.role;
-    const user_id = req.user._id;
-    const {job_id} = req.params;
+    const { role, _id: user_id } = req.user;
+    const { job_id } = req.params;
 
     try {
         let query: any = { _id: job_id };
-        if (role === UserRole.EMPLOYEE) {
-            query.user_id = user_id;
+
+        // Ensure Employer can only view details of their own job
+        if (role === UserRole.EMPLOYER) {
+            query.employer_id = user_id;
         }
 
         const job = await Job.findOne(query)
-            .populate('user_id', 'first_name last_name email')
+            .populate('employer_id', 'first_name last_name email');
 
         if (!job) {
-            return {
-                statusCode: 404,
-                status: false,
-                message: "No job found"
-            };
+            return { statusCode: 404, status: false, message: "No job found" };
         }
 
-        return {
-            statusCode: 200,
-            status: true,
-            data: job
-        };
+        return { statusCode: 200, status: true, data: job };
     } catch (error: any) {
         return { statusCode: 500, status: false, message: error.message };
     }
 };
 
-// delete job service
+// 4. Delete job service
 export const deleteJobService = async (req: any) => {
-    const role = req.user.role;
-    const user_id = req.user._id;
-    const {job_id} = req.params;
+    const { role, _id: user_id } = req.user;
+    const { job_id } = req.params;
 
     try {
         let query: any = { _id: job_id };
-        if (role === UserRole.EMPLOYEE) {
-            query.user_id = user_id;
+        if (role === UserRole.EMPLOYER) {
+            query.employer_id = user_id;
         }
 
         const job = await Job.findOneAndDelete(query);
 
         if (!job) {
-            return {
-                statusCode: 404,
-                status: false,
-                message: "Job not found or unauthorized"
-            };
+            return { statusCode: 404, status: false, message: "Job not found or unauthorized" };
         }
 
-        return {
-            statusCode: 200,
-            status: true,
-            message: "Job deleted successfully"
-        };
+        return { statusCode: 200, status: true, message: "Job deleted successfully" };
     } catch (error: any) {
         return { statusCode: 500, status: false, message: error.message };
     }
 };
 
-
-// update job service
+// 5. Update job service
 export const updateJobService = async (req: any) => {
     try {
         const { job_id } = req.params;
-        const role = req.user.role;
-        const user_id = req.user._id;
+        const { role, _id: user_id } = req.user;
 
         let query: any = { _id: job_id };
-        if (role === UserRole.EMPLOYEE) {
-            query.user_id = user_id;
+        if (role === UserRole.EMPLOYER) {
+            query.employer_id = user_id;
         }
 
         const updatedJob = await Job.findOneAndUpdate(query, req.body, { new: true });
@@ -155,30 +116,29 @@ export const updateJobService = async (req: any) => {
             return { statusCode: 404, status: false, message: "Job not found or unauthorized" };
         }
 
-        return { statusCode: 200, status: true, message: "Job updated" };
+        return { statusCode: 200, status: true, message: "Job updated", data: updatedJob };
     } catch (error: any) {
         return { statusCode: 500, status: false, message: error.message };
     }
 };
 
-// search jobs service
+// 6. Search jobs service
 export const searchJobsByCategoryService = async (req: any) => {
     try {
+        const { role, _id: user_id } = req.user;
+        const { category } = req.params;
 
-        const {category} = req.params;
-        const query = { category: { $regex: new RegExp(category, "i") } };
+        let query: any = {
+            category: { $regex: new RegExp(category, "i") }
+        };
+
+        if (role === UserRole.EMPLOYER) {
+            query.employer_id = user_id;
+        }
 
         const jobs = await Job.find(query)
-            .populate('user_id', 'first_name last_name email')
+            .populate('employer_id', 'first_name last_name email')
             .sort({ createdAt: -1 });
-
-        if (jobs.length === 0) {
-            return {
-                statusCode: 404,
-                status: false,
-                message: `No jobs found in the '${category}' category`
-            };
-        }
 
         return {
             statusCode: 200,
@@ -190,6 +150,3 @@ export const searchJobsByCategoryService = async (req: any) => {
         return { statusCode: 500, status: false, message: error.message };
     }
 };
-
-
-
