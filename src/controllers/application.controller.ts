@@ -1,6 +1,5 @@
 import {Request, Response} from "express";
 import * as applicationServices from "../services/application.service";
-import {updateApplicationStatusService} from "../services/application.service";
 
 
 

@@ -65,63 +65,50 @@ export const initiateApplicationService = async (req: any) => {
 
 // Verify Payment & Create Records
 export const verifyPaymentService = async (req: any) => {
-    const session = await mongoose.startSession();
-    session.startTransaction();
-
     try {
         const { session_id } = req.query;
-        if (!session_id) {
-            await session.abortTransaction();
-            return { statusCode: 400, status: false, message: "Session ID required" };
-        }
+        if (!session_id) return { statusCode: 400, status: false, message: "Session ID required" };
 
         const stripeSession = await stripe.checkout.sessions.retrieve(session_id);
         if (stripeSession.payment_status !== 'paid') {
-            await session.abortTransaction();
             return { statusCode: 400, status: false, message: "Payment not verified" };
         }
 
         const { job_id: mJobId, user_id: mUserId, cv_url } = stripeSession.metadata as any;
 
-
         const existingApp = await Application.findOne({ job_id: mJobId, applicant_id: mUserId, is_paid: true });
-        if (existingApp) {
-            await session.abortTransaction();
-            return { statusCode: 200, status: true, data: existingApp };
-        }
+        if (existingApp) return { statusCode: 200, status: true, data: existingApp };
 
-        const newApplicationId = new mongoose.Types.ObjectId();
 
-        const newInvoice = await Invoice.create([{
-            user_id: mUserId,
-            application_id: newApplicationId,
-            amount: 100,
-            transaction_id: stripeSession.id,
-            payment_status: 'paid',
-            payment_method: "stripe_card"
-        }], { session });
+        const session = await mongoose.startSession();
+        return await session.withTransaction(async () => {
+            const newApplicationId = new mongoose.Types.ObjectId();
 
-        const application = await Application.create([{
-            _id: newApplicationId,
-            job_id: mJobId,
-            applicant_id: mUserId,
-            cv_url,
-            is_paid: true,
-            invoice_id: newInvoice[0]?._id
-        }], { session });
+            const newInvoice = await Invoice.create([{
+                user_id: mUserId,
+                application_id: newApplicationId,
+                amount: 100,
+                transaction_id: stripeSession.id,
+                payment_status: 'paid',
+                payment_method: "stripe_card"
+            }], { session });
 
-        await session.commitTransaction();
-        session.endSession();
+            const application = await Application.create([{
+                _id: newApplicationId,
+                job_id: mJobId,
+                applicant_id: mUserId,
+                cv_url,
+                is_paid: true,
+                invoice_id: newInvoice[0]?._id
+            }], { session });
 
-        return { statusCode: 201, status: true, message: 'Application submitted', data: application[0] };
+            return { statusCode: 201, status: true, message: 'Application submitted', data: application[0] };
+        });
 
     } catch (error: any) {
-        await session.abortTransaction();
-        session.endSession();
         return { statusCode: 500, status: false, message: error.message };
     }
 };
-
 // fetch all applications
 export const fetchApplicationsService = async (req: any) => {
     try {
@@ -134,8 +121,11 @@ export const fetchApplicationsService = async (req: any) => {
             const employerJobs = await Job.find({ employer_id: user_id }).select('_id');
             const jobIds = employerJobs.map(job => job._id);
             query.job_id = { $in: jobIds };
+        } else if (role === 'job_seeker') {
+            query.applicant_id = user_id;
         }
 
+        // Apply filters
         if (status) query.status = status;
         if (job_id) query.job_id = job_id;
 
@@ -148,18 +138,20 @@ export const fetchApplicationsService = async (req: any) => {
                     select: 'first_name last_name',
                 }
             })
-            .populate('applicant_id', 'first_name last_name email') // Updated user_id -> applicant_id
+            .populate('applicant_id', 'first_name last_name email')
             .populate('invoice_id', 'amount payment_status transaction_id');
 
         let filteredApplications = applications;
 
+        // Search by Employer name or Company name
         if (company) {
             const searchRegex = new RegExp(company as string, 'i');
             filteredApplications = applications.filter((app: any) => {
                 const employer = app.job_id?.employer_id;
                 return (
                     searchRegex.test(employer?.first_name) ||
-                    searchRegex.test(employer?.last_name)
+                    searchRegex.test(employer?.last_name) ||
+                    searchRegex.test(employer?.company_name)
                 );
             });
         }
@@ -169,6 +161,38 @@ export const fetchApplicationsService = async (req: any) => {
             status: true,
             count: filteredApplications.length,
             data: filteredApplications
+        };
+    } catch (error: any) {
+        return { statusCode: 500, status: false, message: error.message };
+    }
+};
+
+// update application status
+export const updateApplicationStatusService = async (req: any) => {
+    try {
+        const { application_id } = req.params;
+        const { status } = req.body;
+        const user_id = req.user._id;
+
+        const application = await Application.findById(application_id).populate('job_id');
+
+        if (!application) {
+            return { statusCode: 404, status: false, message: "Application not found" };
+        }
+
+        const job = application.job_id as any;
+        if (job.employer_id.toString() !== user_id.toString()) {
+            return { statusCode: 403, status: false, message: "Unauthorized: Access denied" };
+        }
+
+        application.status = status;
+        await application.save();
+
+        return {
+            statusCode: 200,
+            status: true,
+            message: `Status updated to ${status}`,
+            data: application
         };
     } catch (error: any) {
         return { statusCode: 500, status: false, message: error.message };
