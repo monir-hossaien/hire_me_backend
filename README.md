@@ -4,7 +4,7 @@ HireMe is a comprehensive job portal backend built with **Node.js**, **Express**
 
 ### Project Resources
 * **Postman Documentation:** [Live API Docs](https://documenter.getpostman.com/view/32169346/2sBXVfiB19)
-* **ERD Diagram:** Available in the `docs/ERD.png` file within this repository.
+* **ERD Diagram:** Available in the `diagram/ERD.png` file within this repository.
 
 ---
 
@@ -102,7 +102,7 @@ npm start
 ## Database Schema (ERD)
 The system architecture consists of 4 primary entities: **Users**, **Jobs**, **Applications**, and **Invoices**. Relationships are handled via Mongoose ObjectIds to ensure data integrity.
 
-![Database Entity Relationship Diagram](./diagram/hire_me_diagram.png)
+![Database Entity Relationship Diagram](diagram/ERD.png)
 
 
 
