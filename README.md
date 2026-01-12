@@ -54,6 +54,14 @@ npm run dev
 npm start
 ```
 
+### 🔐 Test Credentials
+
+| Role           | Email | Password |
+|:---------------| :--- | :--- |
+| **admin**      | `monir@example.com` | `admin@123` |
+| **employer**   | `creative@example.com` | `admin@123` |
+| **job_seeker** | `abir@example.com` | `admin@123` |
+
 
 ## API Endpoints
 
